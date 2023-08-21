@@ -1,0 +1,70 @@
+{
+    "Departamentos": [
+        {
+            "idDep": 2,
+            "nomDepartamento": "Cundinamarca",
+            "Ciudades": [
+                {
+                    "idCiudad": 3,
+                    "nomCiudad": "Bogot\u00e1",
+                    "imagen": "bogota.jpg",
+                    "coordenadas": {
+                        "lat": 4,
+                        "lon": 72
+                    }
+                },
+                {
+                    "idCiudad": 4,
+                    "nomCiudad": "Cajic\u00e1",
+                    "imagen": " cajica.jpg",
+                    "coordenadas": {
+                        "lat": 4,
+                        "lon": 72
+                    }
+                },
+                {
+                    "idCiudad": 5,
+                    "nomCiudad": "bermeja",
+                    "imagen": "bermeja.jpg",
+                    "cordenadas": {
+                        "lat": 23,
+                        "lon": 72
+                    }
+                },
+                {
+                    "idCiudad": 7,
+                    "nomCiudad": "kaldas",
+                    "imagen": "kaldas.jpg",
+                    "cordenadas": {
+                        "lat": 23,
+                        "lon": 72
+                    }
+                }
+            ]
+        },
+        {
+            "idDep": 1,
+            "nomDepartamento": "Santander",
+            "Ciudades": [
+                {
+                    "idCiudad": 2,
+                    "nomCiudad": "Bucaramanga",
+                    "imagen": "bucaramanga.jpg",
+                    "cordenadas": {
+                        "lat": 23,
+                        "lon": 72
+                    }
+                },
+                {
+                  "idCiudad": 9,
+                  "nomCiudad": "jamaica",
+                  "imagen": "jamainca.jpg",
+                  "cordenadas": {
+                      "lat": 23,
+                      "lon": 72
+                  }
+              }
+            ]
+        }
+    ]
+}

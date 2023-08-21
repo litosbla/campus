@@ -37,7 +37,7 @@ def leer_rango(msg,min,max):
     while True:
         try:
             caracter=leer_numero(msg)
-            if caracter > min and caracter< max:
+            if caracter > min-1 and caracter< max+1:
                 return caracter
             error(f"caracter invalido, tiene que estar entre {min} y {max}")
             continue
@@ -59,11 +59,12 @@ def menu():
 def mostrar_ciudad(ciudades_por_departamento):
      # parto de dic_ciudad.items()
     [[print(f"\t{key} ---- > {value}") if key != "coordenadas" else [print(f"\t{key_1} ---- > {value_1}")for key_1,value_1 in value.items()] for key, value in ciudades_por_departamento[i].items()]for i in range(len(ciudades_por_departamento))]
-
+    
 def listar_ciudades():
     pais=leer_json()
     #parto de pais["departamentos"][i]["ciudades"]
     [mostrar_ciudad(pais["Departamentos"][i]["Ciudades"])for i in range(len(pais["Departamentos"]))]
+    input("Digite cualquier tecla para continuar")
 def leer_num_dif_lista(msg,msgerror,lista):
     while True:
         num=leer_numero(msg)
@@ -126,13 +127,20 @@ def adicionar_ciudad():
     pais=leer_json()
     while True:
         ids_departamentos,nombres_departamentos,ids_ciudades=calcular_de_limitantes(pais)
-        [print(i," --- > ",departamento)for i,departamento in enumerate(nombres_departamentos)]
-        i=leer_rango("\tDigite el indice del departamento al que quiere agregar otra ciudad",0,len(nombres_departamentos)+1)
+        [print(i+1," --- > ",departamento)for i,departamento in enumerate(nombres_departamentos)]
+        i=leer_rango("\tDigite el indice del departamento al que quiere agregar otra ciudad",1,len(nombres_departamentos))
         while True:
+            ids_departamentos,nombres_departamentos,ids_ciudades=calcular_de_limitantes(pais)
+            ciudades=crea_lista_ciudades(ids_ciudades)
+            pais["Departamentos"][i]["Ciudades"].extend(ciudades)
             
-        ciudades=crea_lista_ciudades(ids_ciudades)
-        pais["Departamentos"][i]["Ciudades"].extend(ciudades)
-        if validar_otro_ciclo("Desea agregar otra ")
+            subir_json(pais)
+            break
+        if validar_otro_ciclo("Desea agregar una ciudad en otro departamento? (si/no)"):
+            continue
+        subir_json(pais)
+        break
+                
 
 
 def calcular_de_limitantes(pais):
@@ -140,6 +148,9 @@ def calcular_de_limitantes(pais):
     nombres_departamentos=[dept["nomDepartamento"] for dept in pais["Departamentos"]]
     ids_ciudades=[]  
     [ids_ciudades.extend([ciudad["idCiudad"] for ciudad in departamento["Ciudades"]]) for departamento in pais["Departamentos"]]
+    # nombres_ciudades=[]
+    # [ids_ciudades.extend([ciudad["nomCiudad"] for ciudad in departamento["Ciudades"]]) for departamento in pais["Departamentos"]]
+    
     return ids_departamentos,nombres_departamentos,ids_ciudades
 
 def adicionar_departamentos():
@@ -161,6 +172,48 @@ def adicionar_departamentos():
         break
 
     subir_json(pais)
+def eliminar_ciudad_en_departamento():
+    pais=leer_json()
+    while True:
+        ids_departamentos,nombres_departamentos,ids_ciudades=calcular_de_limitantes(pais)
+        [print(i+1," --- > ",departamento)for i,departamento in enumerate(nombres_departamentos)]
+        i=leer_rango("\tDigite el indice del departamento al que quiere eliminar la  ciudad",1,len(nombres_departamentos))
+        while True:
+            
+            nombres_ciudades= [dic["nomCiudad"] for dic in pais["Departamentos"][i-1]["Ciudades"]]
+            [print(i+1," --- > ",ciudade)for i,ciudade in enumerate(nombres_ciudades)]
+            j=leer_rango(f"\t Digite el indice de la ciudad en el departamento de {nombres_departamentos[i-1]} que quiere eliminar",1,len(nombres_ciudades))
+            
+            pais["Departamentos"][i-1]["Ciudades"].pop(j-1)
+
+            if validar_otro_ciclo("Desea eliminar otra ciudad?"):
+                continue
+            subir_json(pais)
+            break
+        if validar_otro_ciclo("Desea eliminar una ciudad en otro departamento?(si/no)"):
+            continue
+        subir_json(pais)
+        break
+def eliminar_departamento():
+    pais=leer_json()
+    while True:
+        ids_departamentos,nombres_departamentos,ids_ciudades=calcular_de_limitantes(pais)
+        [print(i+1," --- > ",departamento)for i,departamento in enumerate(nombres_departamentos)]
+        i=leer_rango("\tDigite el indice del departamento al que quiere eliminar",1,len(nombres_departamentos))
+        pais["Departamentos"].pop(i-1)
+        if len(pais["Departamentos"])!=0 and validar_otro_ciclo("Desea eliminar otro departamento?(si/no)"):
+            continue
+        subir_json(pais)
+        break
+def func_list(i,pais):
+    print("="*10,f"Para el departamento {pais['Departamentos'][i]['nomDepartamento']}")
+    [print(f"{key}  --> {value}") if key!="Ciudades" else print(f"Tiene {len(value)} ciudades")for key, value in pais["Departamentos"][i].items() if key!="nomDepartamento"]
+def listar_departamentos():
+    pais=leer_json()
+    ids_departamentos,nombres_departamentos,ids_ciudades=calcular_de_limitantes(pais)
+    
+    [ func_list(i_dep,pais) for i_dep in range(len(pais["Departamentos"]))]
+    input("Digite cualquier tecla para continuar")
 
 def main():
     while True:
@@ -170,15 +223,16 @@ def main():
         elif op == 2:
             adicionar_ciudad()
         elif op == 3:
-            eliminar_ciudad_vs_departamento()
+            eliminar_ciudad_en_departamento()
         elif op == 4:
             adicionar_departamentos()
         elif op == 5:
             eliminar_departamento()
         elif op == 6:
-            listar_departamento()
+            listar_departamentos()
         elif op == 7:
-            salir()
+            print("Goob Bye")
+            break
         
 main()
     
